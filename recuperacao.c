@@ -1,6 +1,8 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
 
 int lerN();
 void lerAB(int *A, int *B);
@@ -93,6 +95,70 @@ double *lerVetDouble(int *aux) {
   return vet;
 }
 
+int oQue(char letra){
+
+    switch (letra) {
+        case '&':
+        case '|':
+        case '!':
+            return 1; // Operador lógico
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+        case '%':
+            return 2; // Operador aritmético
+        case '>':
+        case '<':
+        case '=':
+            return 3; // Operador relacional
+        case ' ':
+        case '.':
+        case ',':
+        case ';':
+        case ':':
+        case '_':
+            return 4; // Separadores
+        default:
+            return 5; // Outro símbolo qualquer
+    }
+
+}
+
+int identificarCaractere(char caractere) {
+    if (isupper(caractere)) {
+        return 1; // Letra maiúscula
+    } else if (islower(caractere)) {
+        return 2; // Letra minúscula
+    } else if (isdigit(caractere)) {
+        return 3; // Dígito
+    } else {
+        switch (caractere) {
+            case '&':
+            case '|':
+            case '!':
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+            case '%':
+            case '>':
+            case '<':
+            case '=':
+                return 4; // Operador
+            case ' ':
+            case '.':
+            case ',':
+            case ';':
+            case ':':
+            case '_':
+                return 5; // Separador
+            default:
+                return 6; // Outro caractere
+        }
+    }
+}
+
 void ler3Valores(double *a, double *b, double *c){
 
   printf("Digite o valor de A: \n");
@@ -115,14 +181,11 @@ void ler3ValoreChar(char *a, char *b, char *c){
 
 }
 
-char preencherCadeia(char *cadeia){
-
-  printf("digite o conteudo do seu vetor:/\n");
-  fgets(cadeia, 100 , stdin);
-
-  return *cadeia;
+void preencherCadeia(char *cadeia) {
+    printf("Digite o conteudo da sua cadeia:\n");
+    getchar();
+    fgets(cadeia, 100, stdin);
 }
-
 
 
 int preencherVetor(int *vet, int n) {
@@ -279,6 +342,13 @@ void testar(double *a,double *b,double *c){
     printf("\nOs numeros sao iguais");
 }
 
+void contarCaracteres(char *cadeia, int tamanho, int *contadores) {
+    for (int i = 0; i < tamanho; i++) {
+        int tipo = identificarCaractere(cadeia[i]);
+        contadores[tipo]++;
+    }
+}
+
 void testarChar(char a, char b, char c){
     if (a < b && b < c) {
         printf("Ordem crescente\n");
@@ -291,6 +361,33 @@ void testarChar(char a, char b, char c){
         printf("Os caracteres sao iguais\n");
     }
 }
+
+void testeoperadores(char *cadeia , int tamanho){
+
+  for (int i = 0; i < tamanho; i++) {
+        int teste = oQue(cadeia[i]);
+        switch (teste) {
+            case 1:
+                printf("O caractere '%c' e um operador logico.\n", cadeia[i]);
+                break;
+            case 2:
+                printf("O caractere '%c' e um operador aritmetico.\n", cadeia[i]);
+                break;
+            case 3:
+                printf("O caractere '%c' e um operador relacional.\n", cadeia[i]);
+                break;
+            case 4:
+                printf("O caractere '%c' e um separador.\n", cadeia[i]);
+                break;
+            case 5:
+                printf("O caractere '%c' e outro simbolo qualquer.\n", cadeia[i]);
+                break;
+            default:
+                break;
+        }
+    }
+}
+
 
 void testarEExibirResultado(double numFloat1, double numFloat2, double *vet, int aux) {
     int resultado = 0.0;
@@ -361,15 +458,37 @@ int main() {
     break;
   }
 
-  case 3:{
+  case 3: {
+    char cadeia[100];
+    preencherCadeia(cadeia);
+    int tamanho = strlen(cadeia) - 1; 
+    testeoperadores(cadeia, tamanho);
+    break;
+}
+
+
+  case 4:{
 
     char cadeia[100];
+    printf("Digite uma cadeia de caracteres: ");
+    getchar();
+    fgets(cadeia, sizeof(cadeia), stdin);
 
-    preencherCadeia(cadeia);
+    int tamanho = strlen(cadeia);
+    int contadores[7] = {0}; // Array para contar ocorrências de cada tipo de caractere
 
+    contarCaracteres(cadeia, tamanho, contadores);
+
+    printf("Letras maiusculas: %d\n", contadores[1]);
+    printf("Letras minusculas: %d\n", contadores[2]);
+    printf("Digitos: %d\n", contadores[3]);
+    printf("Operadores: %d\n", contadores[4]);
+    printf("Separadores: %d\n", contadores[5]);
+    printf("Outros caracteres: %d\n", contadores[6]);
+
+    break;
+    
   }
-
-  case 4:
 
   case 5: {
 
