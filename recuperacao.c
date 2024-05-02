@@ -159,6 +159,56 @@ int identificarCaractere(char caractere) {
     }
 }
 
+int ex10(char x[], char y[], char z[], char **menorP, char **maiorP) {
+  int aux = 0;
+  int cmp_xy = strcmp(x, y);
+  int cmp_xz = strcmp(x, z);
+  int cmp_yz = strcmp(y, z);
+
+  if (cmp_xy > 0 && cmp_xz > 0) {
+
+    aux = 0; // decrescente
+    return aux;
+  } else if (cmp_xy < 0 && cmp_xz < 0) {
+    aux = 1; // crescente
+    return aux;
+  } else {
+    char menor[10], maior[10];
+    strcpy(menor, x);
+    strcpy(maior, x);
+
+    if (cmp_xy > 0) {
+      if (cmp_yz > 0) {
+        strcpy(menor, z);
+      } else {
+        strcpy(menor, y);
+      }
+    } else {
+      if (cmp_xz > 0) {
+        strcpy(menor, z);
+      }
+    }
+
+    if (cmp_xy < 0) {
+      if (cmp_yz < 0) {
+        strcpy(maior, z);
+      } else {
+        strcpy(maior, y);
+      }
+    } else {
+      if (cmp_xz < 0) {
+        strcpy(maior, z);
+      }
+    }
+
+    *menorP = menor;
+    *maiorP = maior;
+
+    aux = 2;
+    return aux;
+  }
+}
+
 void ler3Valores(double *a, double *b, double *c){
 
   printf("Digite o valor de A: \n");
@@ -566,6 +616,34 @@ int main() {
         break;
 
     }
+
+    case 10: {
+    char *menorP, *maiorP;
+    char x[10], y[10], z[10];
+    printf("Digite uma sequencia de caracteres: ");
+    scanf("%s", x);
+    printf("Digite uma sequencia de caracteres: ");
+    scanf("%s", y);
+    printf("Digite uma sequencia de caracteres: ");
+    scanf("%s", z);
+    
+    int resultado = 0;
+    
+    resultado = ex10(x, y, z, &menorP, &maiorP);
+    
+    if (resultado == 0) {
+      printf("A ordem é Decrescente");
+    }
+    
+    if (resultado == 1) {
+      printf("A ordem é Crescente");
+    }
+    
+    if (resultado == 2) {
+      printf("As cadeias não estão em ordem. Menor: %s, Maior: %s\n", menorP,
+             maiorP);
+    }
+  }
 
     
   default:
